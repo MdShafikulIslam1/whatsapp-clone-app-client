@@ -6,35 +6,60 @@ import axios from "axios";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 function login() {
   const router = useRouter();
-  const [{}, dispatch] = useStateProvider();
+  const [{ newUser, userInfo }, dispatch] = useStateProvider();
+
+  useEffect(() => {
+    if (userInfo?.id && !newUser) router.push("/");
+  }, [newUser, userInfo, router]);
+
   const handleLogin = async () => {
     const googleProvider = new GoogleAuthProvider();
+
     const {
-      user: { displayName: name, email, photoURL: profileImage },
+      user: { displayName: name, email, photoURL: profilePhoto },
     } = await signInWithPopup(firebaseAuth, googleProvider);
 
     try {
       if (email) {
-        const { data } = await axios.post(CHECK_USER_ROUTE, { email: email });
+        const { data } = await axios.post(CHECK_USER_ROUTE, { email });
+
         if (!data.status) {
           dispatch({
             type: actionCases.SET_NEW_USER,
             newUser: true,
           });
+
           dispatch({
             type: actionCases.SET_USER_INFO,
             userInfo: {
               name,
               email,
-              profileImage,
+              profilePhoto,
               status: "",
             },
           });
+
+          router.push("/onboarding");
+        } else {
+          const { id, name, about, email, profilePhoto } = data;
+          console.log(id, name, about, email, profilePhoto);
+          dispatch({
+            type: actionCases.SET_USER_INFO,
+            userInfo: {
+              id,
+              name,
+              email,
+              profilePhoto,
+              status: about,
+            },
+          });
+
+          router.push("/");
         }
       }
     } catch (error) {
