@@ -47,8 +47,8 @@ function Main() {
     <>
       <div className="grid w-screen h-screen max-w-full max-h-screen overflow-hidden grid-cols-main">
         <ChatList />
-        {/* <Empty /> */}
-        <Chat />
+        {/* <Chat /> */}
+        <Empty />
       </div>
     </>
   );

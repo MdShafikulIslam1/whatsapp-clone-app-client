@@ -3,6 +3,7 @@ import { actionCases } from "./constants";
 export const initialState = {
   userInfo: undefined,
   newUser: false,
+  allContactPage: false,
 };
 
 const reducer = (state, action) => {
@@ -18,6 +19,13 @@ const reducer = (state, action) => {
         ...state,
         newUser: action.newUser,
       };
+
+    case actionCases.SET_ALL_CONTACT_PAGE: {
+      return {
+        ...state,
+        allContactPage: !state.allContactPage,
+      };
+    }
 
     default:
       return state;

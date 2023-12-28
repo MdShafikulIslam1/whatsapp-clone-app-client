@@ -9,7 +9,7 @@ function ChatHeader() {
   return (
     <div className="z-10 flex items-center justify-between h-16 px-4 py-3 bg-panel-header-background">
       <div className="flex items-center justify-center gap-6">
-        <Avatar type={"sm"} image={"/profile"} />
+        <Avatar type={"sm"} image={"/default_avatar.png"} />
         <div className="flex flex-col">
           <span className="text-primary-strong">DEmo</span>
           <span className="text-sm text-secondary">online/offline</span>

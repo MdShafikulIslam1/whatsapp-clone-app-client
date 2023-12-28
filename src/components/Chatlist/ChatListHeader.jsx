@@ -2,8 +2,15 @@ import React from "react";
 import Avatar from "../common/Avatar";
 import { useStateProvider } from "@/context/StateContext";
 import { BsFillChatLeftTextFill, BsThreeDotsVertical } from "react-icons/bs";
+import { actionCases } from "@/context/constants";
 function ChatListHeader() {
+
   const [{ userInfo }, dispatch] = useStateProvider();
+
+  const handleAllContactPage = () => {
+    dispatch({ type: actionCases.SET_ALL_CONTACT_PAGE });
+  };
+
   return (
     <div className="flex items-center justify-between h-16 px-3 py-3">
       <div className="cursor-pointer">
@@ -13,13 +20,15 @@ function ChatListHeader() {
         <BsFillChatLeftTextFill
           className="text-xl cursor-pointer text-panel-header-icon"
           title="New Chat"
+          onClick={handleAllContactPage}
         />
-        <>
-          <BsThreeDotsVertical
-            className="text-xl cursor-pointer text-panel-header-icon"
-            title="Menu"
-          />
-        </>
+
+     <>
+     <BsThreeDotsVertical
+          className="text-xl cursor-pointer text-panel-header-icon"
+          title="Menu"
+        />
+     </>
       </div>
     </div>
   );
