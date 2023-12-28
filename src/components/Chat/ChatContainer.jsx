@@ -1,7 +1,15 @@
 import React from "react";
 
 function ChatContainer() {
-  return <div>ChatContainer</div>;
+  return <div className="h-[80vh] w-full flex flex-grow relative overflow-auto custom-scrollbar">
+    
+    <div className="fixed top-0 left-0 z-0 w-full h-full bg-fixed bg-chat-background opacity-5"></div>
+    <div className="flex w-full">
+      <div className="flex flex-col justify-end w-full gap-1 overflow-auto">
+        <h1>HI ajljalsjfklsdjfk</h1>
+      </div>
+    </div>
+  </div>;
 }
 
 export default ChatContainer;

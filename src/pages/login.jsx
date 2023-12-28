@@ -13,6 +13,8 @@ function login() {
   const router = useRouter();
   const [{ newUser, userInfo }, dispatch] = useStateProvider();
 
+  console.log("new user", userInfo);
+
   useEffect(() => {
     if (userInfo?.id && !newUser) router.push("/");
   }, [newUser, userInfo, router]);
@@ -27,7 +29,6 @@ function login() {
     try {
       if (email) {
         const { data } = await axios.post(CHECK_USER_ROUTE, { email });
-
         if (!data.status) {
           dispatch({
             type: actionCases.SET_NEW_USER,
@@ -46,8 +47,7 @@ function login() {
 
           router.push("/onboarding");
         } else {
-          const { id, name, about, email, profilePhoto } = data;
-          console.log(id, name, about, email, profilePhoto);
+          const { id, name, about, email, profilePhoto } = data?.data;
           dispatch({
             type: actionCases.SET_USER_INFO,
             userInfo: {
