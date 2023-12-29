@@ -1,4 +1,5 @@
 import { useStateProvider } from "@/context/StateContext";
+import { actionCases } from "@/context/constants";
 import { ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import React, { useState } from "react";
@@ -8,15 +9,29 @@ import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
 
 function MessageBar() {
-  const [{ userInfo, currentChatUser }] = useStateProvider();
+  const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
   const sendMessageHandler = async () => {
     try {
       const { data } = await axios.post(ADD_MESSAGE_ROUTE, {
-        message,
         to: currentChatUser?.id,
         from: userInfo?.id,
+        message,
       });
+
+      socket.current.emit("send-message", {
+        to: currentChatUser?.id,
+        from: userInfo?.id,
+        message: data?.message,
+      });
+      dispatch({
+        type: actionCases.ADD_CHAT_MESSAGE_SOCKET,
+        newMessage: {
+          ...data.message,
+        },
+        fromSelf: true,
+      });
+
       setMessage("");
     } catch (error) {
       console.log(error);
@@ -41,6 +56,7 @@ function MessageBar() {
             placeholder="Type a message"
             className="w-full h-10 px-5 text-sm text-white rounded-lg bg-input-background focus:outline-none"
             onChange={(e) => setMessage(e.target.value)}
+            value={message}
           />
         </div>
 

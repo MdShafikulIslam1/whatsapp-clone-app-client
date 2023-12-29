@@ -6,6 +6,7 @@ export const initialState = {
   allContactPage: false,
   currentChatUser: undefined,
   messages: [],
+  socket: undefined,
 };
 
 const reducer = (state, action) => {
@@ -41,6 +42,14 @@ const reducer = (state, action) => {
         messages: action.messages,
       };
 
+    case actionCases.SET_SOCKET:
+      return { ...state, socket: action.socket };
+
+    case actionCases.ADD_CHAT_MESSAGE_SOCKET:
+      return {
+        ...state,
+        messages: [...state.messages, action.newMessage],
+      };
     default:
       return state;
   }
