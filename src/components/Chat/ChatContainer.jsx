@@ -1,5 +1,7 @@
 import { useStateProvider } from "@/context/StateContext";
+import { calculateTime } from "@/utils/CalculateTime";
 import React from "react";
+import MessageStatus from "../common/MessageStatus";
 
 function ChatContainer() {
   const [{ messages, userInfo, currentChatUser }] = useStateProvider();
@@ -31,6 +33,18 @@ function ChatContainer() {
                       <span className="text-white break-all">
                         {message?.message}
                       </span>
+                      <div className="flex items-end gap-1">
+                        <span className="text-bubble-meta text-[11px] pt-1 min-w-fit">
+                          {calculateTime(message?.createdAt)}
+                        </span>
+                        <span>
+                          {message?.senderId === userInfo?.id && (
+                            <MessageStatus
+                              messageStatus={message?.messageStatus}
+                            />
+                          )}
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>

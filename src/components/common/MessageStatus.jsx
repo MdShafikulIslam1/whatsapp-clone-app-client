@@ -1,7 +1,12 @@
 import React from "react";
+import { BsCheck, BsCheck2All } from "react-icons/bs";
 
-function MessageStatus() {
-  return <div>MessageStatus</div>;
+function MessageStatus({ messageStatus }) {
+  return <>
+  {messageStatus === "sent" && <BsCheck className="text-lg" />}
+  {messageStatus === "delivered" && <BsCheck2All className="text-lg" />}
+  {messageStatus === "read" && <BsCheck2All className="text-lg text-icon-ack" />}
+  </>;
 }
 
 export default MessageStatus;
