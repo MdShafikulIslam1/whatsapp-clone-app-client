@@ -4,7 +4,7 @@ import Empty from "./Empty";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "@/utils/FirebaseConfig";
 import axios from "axios";
-import { CHECK_USER_ROUTE } from "@/utils/ApiRoutes";
+import { CHECK_USER_ROUTE, GET_ALL_MESSAGES_ROUTE } from "@/utils/ApiRoutes";
 import { useRouter } from "next/router";
 import { useStateProvider } from "@/context/StateContext";
 import { actionCases } from "@/context/constants";
@@ -13,7 +13,8 @@ import Chat from "./Chat/Chat";
 function Main() {
   const router = useRouter();
   const [redirectToLogin, setRedirectToLogin] = useState(false);
-  const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
+  const [{ userInfo, currentChatUser, messages }, dispatch] =
+    useStateProvider();
 
   useEffect(() => {
     if (redirectToLogin) router.push("/login");
@@ -25,7 +26,6 @@ function Main() {
       const { data } = await axios.post(CHECK_USER_ROUTE, {
         email: currentUser.email,
       });
-      console.log("Main check user ", data);
       if (!data?.status) {
         router.push("/login");
       }
@@ -42,6 +42,24 @@ function Main() {
       });
     }
   });
+
+  useEffect(() => {
+    try {
+      const getAllMessages = async () => {
+        const {
+          data: { messages },
+        } = await axios.get(
+          `${GET_ALL_MESSAGES_ROUTE}/${userInfo?.id}/${currentChatUser?.id}`
+        );
+        dispatch({ type: actionCases.SET_MESSAGES, messages });
+      };
+      if (currentChatUser?.id) {
+        getAllMessages();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [currentChatUser]);
 
   return (
     <>

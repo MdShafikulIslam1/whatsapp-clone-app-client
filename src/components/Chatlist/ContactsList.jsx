@@ -8,7 +8,7 @@ import ChatLIstItem from "./ChatLIstItem";
 
 function ContactsList() {
   const [{ allContactPage }, dispatch] = useStateProvider();
-  console.log(allContactPage);
+
   const [allContacts, setAllContacts] = useState([]);
   useEffect(() => {
     const getAllUsers = async () => {

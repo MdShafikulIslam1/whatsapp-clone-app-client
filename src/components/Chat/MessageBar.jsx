@@ -17,10 +17,7 @@ function MessageBar() {
         to: currentChatUser?.id,
         from: userInfo?.id,
       });
-      console.log("Sent message", data);
-      if (data?.data?.status) {
-        alert("message sent successfully");
-      }
+      setMessage("");
     } catch (error) {
       console.log(error);
     }
