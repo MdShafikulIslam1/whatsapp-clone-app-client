@@ -5,6 +5,7 @@ import { actionCases } from "@/context/constants";
 
 function ChatLIstItem({ data, isContactPage = false }) {
   const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
+  console.log(currentChatUser)
   const handleContactClick = () => {
     dispatch({
       type: actionCases.CHANGE_CURRENT_CHAT_USER,
