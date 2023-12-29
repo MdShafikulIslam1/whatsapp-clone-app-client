@@ -2,7 +2,8 @@ import { useStateProvider } from "@/context/StateContext";
 import { actionCases } from "@/context/constants";
 import { ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
-import React, { useState } from "react";
+import EmojiPicker from "emoji-picker-react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
@@ -11,6 +12,25 @@ import { MdSend } from "react-icons/md";
 function MessageBar() {
   const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
+  const [showEmojiModal, setShowEmojiModal] = useState(false);
+  const emojiPickerRef = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (event.target.id !== "emoji-open") {
+        if (
+          emojiPickerRef.current &&
+          !emojiPickerRef.current?.contains(event.target)
+        ) {
+          setShowEmojiModal(false);
+        }
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
   const sendMessageHandler = async () => {
     try {
       const { data } = await axios.post(ADD_MESSAGE_ROUTE, {
@@ -37,6 +57,7 @@ function MessageBar() {
       console.log(error);
     }
   };
+
   return (
     <div className="relative flex items-center h-20 gap-6 px-4 bg-panel-header-background">
       <>
@@ -44,7 +65,24 @@ function MessageBar() {
           <BsEmojiSmile
             className="text-xl cursor-pointer text-panel-header-icon"
             title="Emoji"
+            id="emoji-open"
+            onClick={() => setShowEmojiModal(!showEmojiModal)}
           />
+
+          {showEmojiModal && (
+            <div
+              className="absolute z-40 bottom-24 left-16"
+              ref={emojiPickerRef}
+            >
+              <EmojiPicker
+                onEmojiClick={(emoji) =>
+                  setMessage((preMessage) => (preMessage += emoji.emoji))
+                }
+                theme="dark"
+              />
+            </div>
+          )}
+
           <ImAttachment
             className="text-xl cursor-pointer text-panel-header-icon"
             title="Attachment file"
@@ -61,7 +99,7 @@ function MessageBar() {
         </div>
 
         <div className="flex items-center justify-center w-10">
-          <button>
+          <button type="submit">
             <MdSend
               className="text-xl cursor-pointer text-panel-header-icon"
               title="Send Message"
