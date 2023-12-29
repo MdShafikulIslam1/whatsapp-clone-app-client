@@ -1,7 +1,7 @@
 import React from "react";
 import ChatHeader from "./ChatHeader";
-import ChatContainer from "./ChatContainer";
 import MessageBar from "./MessageBar";
+import ChatContainer from "./ChatContainer";
 
 function Chat() {
   return (
