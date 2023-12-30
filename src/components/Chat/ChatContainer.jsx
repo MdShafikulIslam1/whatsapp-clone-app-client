@@ -2,6 +2,7 @@ import { useStateProvider } from "@/context/StateContext";
 import { calculateTime } from "@/utils/CalculateTime";
 import React from "react";
 import MessageStatus from "../common/MessageStatus";
+import ImageMessage from "./ImageMessage";
 
 function ChatContainer() {
   const [{ messages, userInfo, currentChatUser }] = useStateProvider();
@@ -12,7 +13,6 @@ function ChatContainer() {
         <div className="flex w-full">
           <div className="flex flex-col justify-end w-full gap-1 overflow-auto">
             {messages?.map((message, index) => {
-              console.log(message?.message);
               return (
                 <div
                   key={index}
@@ -46,6 +46,9 @@ function ChatContainer() {
                         </span>
                       </div>
                     </div>
+                  )}
+                  {message?.type === "image" && (
+                    <ImageMessage message={message} />
                   )}
                 </div>
               );

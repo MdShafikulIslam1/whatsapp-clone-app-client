@@ -58,7 +58,6 @@ function Avatar({ type, image, setImage }) {
     const image = document.createElement("img");
 
     reader.onload = function (event) {
-      console.log(event);
       image.src = event.target.result;
       image.setAttribute("image-src", event.target.result);
     };

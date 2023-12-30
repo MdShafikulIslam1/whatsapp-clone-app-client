@@ -1,6 +1,6 @@
 import { useStateProvider } from "@/context/StateContext";
 import { actionCases } from "@/context/constants";
-import { ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
+import { ADD_IMAGE_MESSAGE_ROUTE, ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
@@ -8,12 +8,61 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
+import PhotoPicker from "../common/PhotoPicker";
 
 function MessageBar() {
   const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
   const [showEmojiModal, setShowEmojiModal] = useState(false);
+  const [graphPhoto, setGraphPhoto] = useState(false);
   const emojiPickerRef = useRef(null);
+
+  const photoPickerHandleChange = async (e) => {
+    try {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await axios.post(ADD_IMAGE_MESSAGE_ROUTE, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        params: {
+          from: userInfo?.id,
+          to: currentChatUser?.id,
+        },
+      });
+      if (response.status === 200) {
+        socket.current.emit("send-message", {
+          to: currentChatUser?.id,
+          from: userInfo?.id,
+          message: response?.data?.message,
+        });
+        dispatch({
+          type: actionCases.ADD_CHAT_MESSAGE_SOCKET,
+          newMessage: {
+            ...response?.data.message,
+          },
+          fromSelf: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (graphPhoto) {
+      const data = document.getElementById("photo-picker");
+      data.click();
+    }
+    document.body.onfocus = (e) => {
+      setTimeout(() => {
+        setGraphPhoto(false);
+      }, 1000);
+    };
+  }, [graphPhoto]);
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (event.target.id !== "emoji-open") {
@@ -86,6 +135,7 @@ function MessageBar() {
           <ImAttachment
             className="text-xl cursor-pointer text-panel-header-icon"
             title="Attachment file"
+            onClick={() => setGraphPhoto(true)}
           />
         </div>
         <div className="flex items-center w-full h-10 rounded-lg">
@@ -112,6 +162,7 @@ function MessageBar() {
           </button>
         </div>
       </>
+      {graphPhoto && <PhotoPicker onChange={photoPickerHandleChange} />}
     </div>
   );
 }
