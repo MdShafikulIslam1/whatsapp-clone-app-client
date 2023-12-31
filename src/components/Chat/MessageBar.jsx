@@ -10,11 +10,17 @@ import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
 import PhotoPicker from "../common/PhotoPicker";
 
+import dynamic from "next/dynamic";
+const CaptureAudio = dynamic(() => import("../common/CaptureAudio"), {
+  ssr: false,
+});
+
 function MessageBar() {
   const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
   const [showEmojiModal, setShowEmojiModal] = useState(false);
   const [graphPhoto, setGraphPhoto] = useState(false);
+  const [showAudioRecorder, setShowAudioRecorder] = useState(false);
   const emojiPickerRef = useRef(null);
 
   const photoPickerHandleChange = async (e) => {
@@ -150,19 +156,27 @@ function MessageBar() {
 
         <div className="flex items-center justify-center w-10">
           <button type="submit">
-            <MdSend
-              className="text-xl cursor-pointer text-panel-header-icon"
-              title="Send Message"
-              onClick={sendMessageHandler}
-            />
-            {/* <FaMicrophone
-              className="text-xl cursor-pointer text-panel-header-icon"
-              title="Send Message"
-            /> */}
+            {message?.length ? (
+              <MdSend
+                className="text-xl cursor-pointer text-panel-header-icon"
+                title="Send Message"
+                onClick={sendMessageHandler}
+              />
+            ) : (
+              <FaMicrophone
+                className="text-xl cursor-pointer text-panel-header-icon"
+                title="Record"
+                onClick={() => setShowAudioRecorder(true)}
+              />
+            )}
           </button>
         </div>
       </>
+
       {graphPhoto && <PhotoPicker onChange={photoPickerHandleChange} />}
+      {showAudioRecorder && (
+        <CaptureAudio setShowAudioRecorder={setShowAudioRecorder} />
+      )}
     </div>
   );
 }

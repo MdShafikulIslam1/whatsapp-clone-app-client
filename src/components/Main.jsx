@@ -14,13 +14,14 @@ import { useStateProvider } from "@/context/StateContext";
 import { actionCases } from "@/context/constants";
 import Chat from "./Chat/Chat";
 import { io } from "socket.io-client";
+import SearchMessages from "./Chat/SearchMessages";
 
 function Main() {
   const router = useRouter();
   const socket = useRef();
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [socketEvent, setSocketEvent] = useState(false);
-  const [{ userInfo, currentChatUser, messages }, dispatch] =
+  const [{ userInfo, currentChatUser, messages, messageSearch }, dispatch] =
     useStateProvider();
 
   useEffect(() => {
@@ -93,7 +94,15 @@ function Main() {
     <>
       <div className="grid w-screen h-screen max-w-full max-h-screen overflow-hidden grid-cols-main">
         <ChatList />
-        {currentChatUser ? <Chat /> : <Empty />}
+        {currentChatUser ? (
+          <div className={messageSearch ? "grid grid-cols-2" : "grid-cols-2"}>
+            <Chat />
+
+            {messageSearch && <SearchMessages />}
+          </div>
+        ) : (
+          <Empty />
+        )}
       </div>
     </>
   );
