@@ -1,8 +1,37 @@
-import React from "react";
+import { useStateProvider } from "@/context/StateContext";
+import { actionCases } from "@/context/constants";
+import { GET_INITIAL_CONTACTS_ROUTE } from "@/utils/ApiRoutes";
+import axios from "axios";
+import React, { useEffect } from "react";
+import ChatLIstItem from "./ChatLIstItem";
 
 function List() {
+  const [{ userInfo, userContacts }, dispatch] = useStateProvider();
+
+  useEffect(() => {
+    const getInitialContactsWithMessages = async () => {
+      try {
+        const {
+          data: { users, onlineUsers },
+        } = await axios.get(`${GET_INITIAL_CONTACTS_ROUTE}/${userInfo.id}`);
+
+        dispatch({ type: actionCases.SET_USERS_CONTACTS, userContacts: users });
+        dispatch({ type: actionCases.SET_ONLINE_USERS, onlineUsers });
+
+        console.log("getInitialContactsWithMessages", users, onlineUsers);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (userInfo?.id) getInitialContactsWithMessages();
+  }, []);
   return (
-    <div className="flex-auto max-h-full overflow-auto bg-search-input-container-background custom-scrollbar"></div>
+    <div className="flex-auto max-h-full overflow-auto bg-search-input-container-background custom-scrollbar">
+      {userContacts.map((contact) => (
+        <ChatLIstItem data={contact} key={contact?.id} />
+      ))}
+    </div>
   );
 }
 
