@@ -18,6 +18,7 @@ import SearchMessages from "./Chat/SearchMessages";
 import VoiceCall from "./Call/VoiceCall";
 import VideoCall from "./Call/VideoCall";
 import IncomingVideoCall from "./common/IncomingVideoCall";
+import IncomingCall from "./common/IncomingCall";
 
 function Main() {
   const router = useRouter();
@@ -80,36 +81,29 @@ function Main() {
           type: actionCases.ADD_CHAT_MESSAGE_SOCKET,
           newMessage: { ...data.message },
         });
-        socket.current.on(
-          "incoming-voice-call",
-          ({ from, roomId, callType }) => {
-            dispatch({
-              type: actionCases.SET_INCOMING_VOICE_CALL,
-              incomingVoiceCall: { ...from, roomId, callType },
-            });
-          }
-        );
-
-        socket.current.on(
-          "incoming-video-call",
-          ({ from, roomId, callType }) => {
-            dispatch({
-              type: actionCases.SET_INCOMING_VIDEO_CALL,
-              incomingVideoCall: { ...from, roomId, callType },
-            });
-          }
-        );
-
-        socket.current.on("voice-call-rejected", () => {
-          dispatch({ type: actionCases.END_CALL });
-        });
-
-        socket.current.on("video-call-rejected", () => {
-          dispatch({ type: actionCases.END_CALL });
-        });
-
-        setSocketEvent(true);
       });
+      socket.current.on("incoming-voice-call", ({ from, roomId, callType }) => {
+        dispatch({
+          type: actionCases.SET_INCOMING_VOICE_CALL,
+          incomingVoiceCall: { ...from, roomId, callType },
+        });
+      });
+
+      socket.current.on("incoming-video-call", ({ from, roomId, callType }) => {
+        dispatch({
+          type: actionCases.SET_INCOMING_VIDEO_CALL,
+          incomingVideoCall: { ...from, roomId, callType },
+        });
+      });
+
+      socket.current.on("voice-call-rejected", () => {
+        dispatch({ type: actionCases.END_CALL });
+      });
+
+      socket.current.on("video-call-rejected", () => {
+        dispatch({ type: actionCases.END_CALL });
+      });
+      setSocketEvent(true);
     }
   }, [socket.current]);
 
@@ -135,7 +129,7 @@ function Main() {
     <>
       {incomingVideoCall && <IncomingVideoCall />}
 
-      {incomingVoiceCall && <IncomingVoiceCall />}
+      {incomingVoiceCall && <IncomingCall />}
 
       {voiceCall && (
         <div className="w-screen h-screen max-h-full overflow-hidden bg-gray-400">
