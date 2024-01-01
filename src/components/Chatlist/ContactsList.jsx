@@ -7,9 +7,26 @@ import { BiArrowBack, BiSearchAlt2 } from "react-icons/bi";
 import ChatLIstItem from "./ChatLIstItem";
 
 function ContactsList() {
-  const [{ allContactPage }, dispatch] = useStateProvider();
+  const [{}, dispatch] = useStateProvider();
 
   const [allContacts, setAllContacts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchContacts, setSearchContacts] = useState([]);
+
+  useEffect(() => {
+    if (searchTerm.length) {
+      const filterData = {};
+      Object.keys(allContacts).forEach((key) => {
+        filterData[key] = allContacts[key].filter((obj) =>
+          obj.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      });
+      setSearchContacts(filterData);
+    } else {
+      setSearchContacts(allContacts);
+    }
+  }, [searchTerm]);
+
   useEffect(() => {
     const getAllUsers = async () => {
       try {
@@ -18,6 +35,7 @@ function ContactsList() {
         } = await axios.get(GET_ALL_USERS);
 
         setAllContacts(users);
+        setSearchContacts(users);
       } catch (error) {
         console.log(error);
       }
@@ -47,21 +65,29 @@ function ContactsList() {
               type="text"
               placeholder="search contacts"
               className="w-full text-sm text-white bg-transparent focus:outline-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
       </div>
-      {Object.entries(allContacts).map(([initialLetter, userList]) => {
+      {Object.entries(searchContacts).map(([initialLetter, userList]) => {
         return (
-          <div key={Date.now() + initialLetter}>
-            <div className="py-5 pl-10 text-teal-light">{initialLetter}</div>
+          userList.length > 0 && (
+            <div key={Date.now() + initialLetter}>
+              <div className="py-5 pl-10 text-teal-light">{initialLetter}</div>
 
-            {userList.map((user) => {
-              return (
-                <ChatLIstItem key={user?.id} data={user} isContactPage={true} />
-              );
-            })}
-          </div>
+              {userList?.map((user) => {
+                return (
+                  <ChatLIstItem
+                    key={user?.id}
+                    data={user}
+                    isContactPage={true}
+                  />
+                );
+              })}
+            </div>
+          )
         );
       })}
     </div>
