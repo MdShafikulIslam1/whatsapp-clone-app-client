@@ -103,6 +103,9 @@ function Main() {
       socket.current.on("video-call-rejected", () => {
         dispatch({ type: actionCases.END_CALL });
       });
+      socket.current.on("online-users", ({ onlineUsers }) => {
+        dispatch({ type: actionCases.SET_ONLINE_USERS, onlineUsers });
+      });
       setSocketEvent(true);
     }
   }, [socket.current]);

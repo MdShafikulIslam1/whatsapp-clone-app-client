@@ -9,7 +9,7 @@ import { actionCases } from "@/context/constants";
 import ContextMenu from "../common/ContextMenu";
 
 function ChatHeader() {
-  const [{ currentChatUser }, dispatch] = useStateProvider();
+  const [{ currentChatUser, onlineUsers }, dispatch] = useStateProvider();
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false);
   const [contextMenuCoordinates, setContextMenuCoordinates] = useState({
     x: 0,
@@ -61,7 +61,9 @@ function ChatHeader() {
         <Avatar type={"sm"} image={currentChatUser?.profilePhoto} />
         <div className="flex flex-col">
           <span className="text-primary-strong">{currentChatUser?.name}</span>
-          <span className="text-sm text-secondary">online/offline</span>
+          <span className="text-sm text-secondary">
+            {onlineUsers.includes(currentChatUser?.id) ? "online" : "offline"}
+          </span>
         </div>
       </div>
       <div className="flex gap-6">
