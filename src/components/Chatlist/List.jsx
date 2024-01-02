@@ -19,7 +19,6 @@ function List() {
         dispatch({ type: actionCases.SET_USERS_CONTACTS, userContacts: users });
         dispatch({ type: actionCases.SET_ONLINE_USERS, onlineUsers });
 
-        console.log("getInitialContactsWithMessages", users, onlineUsers);
       } catch (error) {
         console.log(error);
       }

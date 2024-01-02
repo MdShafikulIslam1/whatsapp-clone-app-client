@@ -40,7 +40,7 @@ function ContextMenu({ options, coordinates, contextMenu, setContextMenu }) {
             onClick={(e) => handleClick(e, callback)}
             className="px-5 py-2 cursor-pointer hover:bg-gray-400 hover:tracking-widest"
           >
-            <span className="text-white">{name}</span>
+            <span className="z-50 text-white">{name}</span>
           </li>
         ))}
       </ul>

@@ -6,7 +6,6 @@ import React from "react";
 function IncomingVideoCall() {
   const [{ incomingVideoCall, socket }, dispatch] = useStateProvider();
 
-  console.log("incomingVideo", incomingVideoCall);
 
   const acceptCall = () => {
     dispatch({
