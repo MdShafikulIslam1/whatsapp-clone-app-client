@@ -48,6 +48,8 @@ function Container({ data }) {
               "aa44d2079f498893452cd882b2f63326"
             );
             setZgVar(zg);
+
+            setZgVar(zg);
             zg.on(
               "roomStreamUpdate",
               async (roomId, updateType, streamList, extendedData) => {

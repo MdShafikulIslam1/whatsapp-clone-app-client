@@ -20,14 +20,15 @@ function MessageBar() {
   const [message, setMessage] = useState("");
   const [showEmojiModal, setShowEmojiModal] = useState(false);
   const [graphPhoto, setGraphPhoto] = useState(false);
-  const [showAudioRecorder, setShowAudioRecorder] = useState(false);
+  //TODO:implement audio or voice message(try to with cloudinary)
+  // const [showAudioRecorder, setShowAudioRecorder] = useState(false);
   const emojiPickerRef = useRef(null);
 
   const photoPickerHandleChange = async (e) => {
     try {
       const file = e.target.files[0];
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("file", file);
 
       const response = await axios.post(ADD_IMAGE_MESSAGE_ROUTE, formData, {
         headers: {
@@ -156,7 +157,15 @@ function MessageBar() {
 
         <div className="flex items-center justify-center w-10">
           <button type="submit">
-            {message?.length ? (
+            <MdSend
+              className="text-xl cursor-pointer text-panel-header-icon"
+              title="Send Message"
+              onClick={sendMessageHandler}
+            />
+
+            {/* TODO:implement audio or voice message(try to with cloudinary) */}
+
+            {/* {message?.length ? (
               <MdSend
                 className="text-xl cursor-pointer text-panel-header-icon"
                 title="Send Message"
@@ -168,15 +177,17 @@ function MessageBar() {
                 title="Record"
                 onClick={() => setShowAudioRecorder(true)}
               />
-            )}
+            )} */}
           </button>
         </div>
       </>
 
       {graphPhoto && <PhotoPicker onChange={photoPickerHandleChange} />}
-      {showAudioRecorder && (
+      {/* TODO:implement audio or voice message(try to with cloudinary) */}
+
+      {/* {showAudioRecorder && (
         <CaptureAudio setShowAudioRecorder={setShowAudioRecorder} />
-      )}
+      )} */}
     </div>
   );
 }

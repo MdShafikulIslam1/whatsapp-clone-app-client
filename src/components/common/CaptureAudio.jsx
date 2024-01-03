@@ -188,7 +188,7 @@ function CaptureAudio({ setShowAudioRecorder }) {
     try {
       if (recordedAudio) {
         const formData = new FormData();
-        formData.append("audio", renderedAudio);
+        formData.append("file", renderedAudio);
 
         const response = await axios.post(ADD_AUDIO_MESSAGE_ROUTE, formData, {
           headers: {

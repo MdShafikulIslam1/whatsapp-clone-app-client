@@ -84,7 +84,7 @@ function Avatar({ type, image, setImage }) {
       <div className="flex items-center justify-center">
         {type === "sm" && (
           <div className="relative w-10 h-10">
-            <Image src={image} fill />
+            <Image src={image} fill className="rounded-full" />
           </div>
         )}
 

@@ -9,6 +9,7 @@ const VoiceMessage = dynamic(() => import("./VoiceMessage"), { ssr: false });
 
 function ChatContainer() {
   const [{ messages, userInfo, currentChatUser }] = useStateProvider();
+  console.log("messages", messages)
   return (
     <div className="h-[80vh] w-full flex-grow relative overflow-auto custom-scrollbar">
       <div className="fixed z-0 w-full h-full bg-fixed bg-chat-background opacity-5"></div>

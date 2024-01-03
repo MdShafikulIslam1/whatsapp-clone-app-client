@@ -36,7 +36,8 @@ function VoiceMessage({ message }) {
     }
 
     return () => {
-      waveform.current.destroy();
+      // waveform.current.destroy();
+      waveform.current = null;
     };
   }, []);
 
@@ -46,7 +47,8 @@ function VoiceMessage({ message }) {
     setAudioMessage(audio);
 
     if (waveform.current) {
-      waveform.current?.load(audioUrl);
+      // waveform.current.load(audioUrl);
+      waveform.current.load(audioUrl);
       waveform.current.on("ready", () => {
         setTotalDuration(waveform.current.getDuration());
       });
@@ -66,7 +68,7 @@ function VoiceMessage({ message }) {
   }, [audioMessage]);
 
   const handlePlayAudio = () => {
-    if (audioMessage) {
+    if (audioMessage && waveform.current) {
       waveform.current.stop();
       waveform.current.play();
       audioMessage.play();
@@ -74,10 +76,12 @@ function VoiceMessage({ message }) {
     }
   };
 
-  const handlePauseAudio = () => {
-    waveform.current.stop();
-    audioMessage.pause();
-    setIsPlaying(false);
+  const handlePauseAudio = () => { 
+    if (waveform.current) {
+      waveform.current.stop();
+      audioMessage.pause();
+      setIsPlaying(false);
+    }
   };
 
   const formatTime = (time) => {

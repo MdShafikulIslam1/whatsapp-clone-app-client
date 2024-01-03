@@ -1,5 +1,4 @@
 import { useStateProvider } from "@/context/StateContext";
-import { HOST } from "@/utils/ApiRoutes";
 import { calculateTime } from "@/utils/CalculateTime";
 import Image from "next/image";
 import React from "react";
@@ -17,7 +16,7 @@ function ImageMessage({ message }) {
     >
       <div className="relative">
         <Image
-          src={`${HOST}/${message?.message}`}
+          src={message?.message}
           alt="chat-image"
           height={300}
           width={300}
