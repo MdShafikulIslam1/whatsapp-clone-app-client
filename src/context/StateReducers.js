@@ -11,10 +11,6 @@ export const initialState = {
   userContacts: [],
   onlineUsers: [],
   filteredContacts: [],
-  voiceCall: undefined,
-  videoCall: undefined,
-  incomingVoiceCall: undefined,
-  incomingVideoCall: undefined,
 };
 
 const reducer = (state, action) => {
@@ -86,39 +82,6 @@ const reducer = (state, action) => {
         filteredContacts,
       };
     }
-
-    case actionCases.SET_VOICE_CALL:
-      return {
-        ...state,
-        voiceCall: action.voiceCall,
-      };
-
-    case actionCases.SET_VIDEO_CALL:
-      return {
-        ...state,
-        videoCall: action.videoCall,
-      };
-
-    case actionCases.SET_INCOMING_VOICE_CALL:
-      return {
-        ...state,
-        incomingVoiceCall: action.incomingVoiceCall,
-      };
-
-    case actionCases.SET_INCOMING_VIDEO_CALL:
-      return {
-        ...state,
-        incomingVideoCall: action.incomingVideoCall,
-      };
-
-    case actionCases.END_CALL:
-      return {
-        ...state,
-        voiceCall: undefined,
-        videoCall: undefined,
-        incomingVoiceCall: undefined,
-        incomingVideoCall: undefined,
-      };
 
     case actionCases.SET_EXIST_CHAT:
       return {

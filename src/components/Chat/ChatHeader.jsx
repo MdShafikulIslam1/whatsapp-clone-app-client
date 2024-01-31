@@ -31,30 +31,6 @@ function ChatHeader() {
     },
   ];
 
-  const handelVoiceCall = () => {
-    dispatch({
-      type: actionCases.SET_VOICE_CALL,
-      voiceCall: {
-        ...currentChatUser,
-        type: "out-going",
-        callType: "voice",
-        roomId: Date.now(),
-      },
-    });
-  };
-
-  const handelVideoCall = () => {
-    dispatch({
-      type: actionCases.SET_VIDEO_CALL,
-      videoCall: {
-        ...currentChatUser,
-        type: "out-going",
-        callType: "video",
-        roomId: Date.now(),
-      },
-    });
-  };
-
   return (
     <div className="z-10 flex items-center justify-between h-16 px-4 py-3 bg-panel-header-background">
       <div className="flex items-center justify-center gap-6">
@@ -67,14 +43,6 @@ function ChatHeader() {
         </div>
       </div>
       <div className="flex gap-6">
-        <MdCall
-          onClick={handelVoiceCall}
-          className="text-xl cursor-pointer text-panel-header-icon"
-        />
-        <IoVideocam
-          onClick={handelVideoCall}
-          className="text-xl cursor-pointer text-panel-header-icon"
-        />
         <BiSearchAlt2
           onClick={() => dispatch({ type: actionCases.SET_MESSAGES_SEARCH })}
           className="text-xl cursor-pointer text-panel-header-icon"

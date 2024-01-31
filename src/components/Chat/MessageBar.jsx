@@ -5,23 +5,15 @@ import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import { FaMicrophone } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
 import PhotoPicker from "../common/PhotoPicker";
-
-import dynamic from "next/dynamic";
-const CaptureAudio = dynamic(() => import("../common/CaptureAudio"), {
-  ssr: false,
-});
 
 function MessageBar() {
   const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
   const [showEmojiModal, setShowEmojiModal] = useState(false);
   const [graphPhoto, setGraphPhoto] = useState(false);
-  //TODO:implement audio or voice message(try to with cloudinary)
-  // const [showAudioRecorder, setShowAudioRecorder] = useState(false);
   const emojiPickerRef = useRef(null);
 
   const photoPickerHandleChange = async (e) => {
@@ -39,6 +31,7 @@ function MessageBar() {
           to: currentChatUser?.id,
         },
       });
+
       if (response.status === 200) {
         socket.current.emit("send-message", {
           to: currentChatUser?.id,
@@ -162,32 +155,11 @@ function MessageBar() {
               title="Send Message"
               onClick={sendMessageHandler}
             />
-
-            {/* TODO:implement audio or voice message(try to with cloudinary) */}
-
-            {/* {message?.length ? (
-              <MdSend
-                className="text-xl cursor-pointer text-panel-header-icon"
-                title="Send Message"
-                onClick={sendMessageHandler}
-              />
-            ) : (
-              <FaMicrophone
-                className="text-xl cursor-pointer text-panel-header-icon"
-                title="Record"
-                onClick={() => setShowAudioRecorder(true)}
-              />
-            )} */}
           </button>
         </div>
       </>
 
       {graphPhoto && <PhotoPicker onChange={photoPickerHandleChange} />}
-      {/* TODO:implement audio or voice message(try to with cloudinary) */}
-
-      {/* {showAudioRecorder && (
-        <CaptureAudio setShowAudioRecorder={setShowAudioRecorder} />
-      )} */}
     </div>
   );
 }
