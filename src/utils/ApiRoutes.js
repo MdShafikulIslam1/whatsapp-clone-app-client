@@ -1,4 +1,4 @@
-export const HOST = "https://whatsapp-clone-app-server.vercel.app";
+export const HOST = "https://whatsapp-clone-app-server.vercel.app/";
 
 const AUTH_URL = `${HOST}/api/auth`;
 const MESSAGE_URL = `${HOST}/api/messages`;
